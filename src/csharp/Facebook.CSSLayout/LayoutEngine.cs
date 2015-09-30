@@ -279,7 +279,7 @@ namespace Facebook.CSSLayout
         boolean isResolvedRowDimDefined = !float.IsNaN(node.layout.dimensions[dim[resolvedRowAxis]]);
     
         float width = CSSConstants.Undefined;
-        if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] > 0.0)) {
+        if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] >= 0.0)) {
           width = node.style.dimensions[DIMENSION_WIDTH];
         } else if (isResolvedRowDimDefined) {
           width = node.layout.dimensions[dim[resolvedRowAxis]];
@@ -292,8 +292,8 @@ namespace Facebook.CSSLayout
         // We only need to give a dimension for the text if we haven't got any
         // for it computed yet. It can either be from the style attribute or because
         // the element is flexible.
-        boolean isRowUndefined = !(!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] > 0.0) && !isResolvedRowDimDefined;
-        boolean isColumnUndefined = !(!float.IsNaN(node.style.dimensions[dim[CSS_FLEX_DIRECTION_COLUMN]]) && node.style.dimensions[dim[CSS_FLEX_DIRECTION_COLUMN]] > 0.0) &&
+        boolean isRowUndefined = !(!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] >= 0.0) && !isResolvedRowDimDefined;
+        boolean isColumnUndefined = !(!float.IsNaN(node.style.dimensions[dim[CSS_FLEX_DIRECTION_COLUMN]]) && node.style.dimensions[dim[CSS_FLEX_DIRECTION_COLUMN]] >= 0.0) &&
           float.IsNaN(node.layout.dimensions[dim[CSS_FLEX_DIRECTION_COLUMN]]);
     
         // Let's not measure the text if we already know both dimensions
@@ -404,7 +404,7 @@ namespace Facebook.CSSLayout
           if (alignItem == CSSAlign.Stretch &&
               child.style.positionType == CSSPositionType.Relative &&
               isCrossDimDefined &&
-              !(!float.IsNaN(child.style.dimensions[dim[crossAxis]]) && child.style.dimensions[dim[crossAxis]] > 0.0)) {
+              !(!float.IsNaN(child.style.dimensions[dim[crossAxis]]) && child.style.dimensions[dim[crossAxis]] >= 0.0)) {
             child.layout.dimensions[dim[crossAxis]] = Math.Max(
               boundAxis(child, crossAxis, node.layout.dimensions[dim[crossAxis]] -
                 paddingAndBorderAxisCross - (child.style.margin.getWithFallback(leadingSpacing[crossAxis], leading[crossAxis]) + child.style.margin.getWithFallback(trailingSpacing[crossAxis], trailing[crossAxis]))),
@@ -427,7 +427,7 @@ namespace Facebook.CSSLayout
             for (ii = 0; ii < 2; ii++) {
               axis = (ii != 0) ? CSS_FLEX_DIRECTION_ROW : CSS_FLEX_DIRECTION_COLUMN;
               if (!float.IsNaN(node.layout.dimensions[dim[axis]]) &&
-                  !(!float.IsNaN(child.style.dimensions[dim[axis]]) && child.style.dimensions[dim[axis]] > 0.0) &&
+                  !(!float.IsNaN(child.style.dimensions[dim[axis]]) && child.style.dimensions[dim[axis]] >= 0.0) &&
                   !float.IsNaN(child.style.position[leading[axis]]) &&
                   !float.IsNaN(child.style.position[trailing[axis]])) {
                 child.layout.dimensions[dim[axis]] = Math.Max(
@@ -471,7 +471,7 @@ namespace Facebook.CSSLayout
           } else {
             maxWidth = CSSConstants.Undefined;
             if (!isMainRowDirection) {
-              if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] > 0.0)) {
+              if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] >= 0.0)) {
                 maxWidth = node.layout.dimensions[dim[resolvedRowAxis]] -
                   paddingAndBorderAxisResolvedRow;
               } else {
@@ -605,7 +605,7 @@ namespace Facebook.CSSLayout
             );
     
             maxWidth = CSSConstants.Undefined;
-            if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] > 0.0)) {
+            if ((!float.IsNaN(node.style.dimensions[dim[resolvedRowAxis]]) && node.style.dimensions[dim[resolvedRowAxis]] >= 0.0)) {
               maxWidth = node.layout.dimensions[dim[resolvedRowAxis]] -
                 paddingAndBorderAxisResolvedRow;
             } else if (!isMainRowDirection) {
@@ -900,7 +900,7 @@ namespace Facebook.CSSLayout
           axis = (ii != 0) ? CSS_FLEX_DIRECTION_ROW : CSS_FLEX_DIRECTION_COLUMN;
     
           if (!float.IsNaN(node.layout.dimensions[dim[axis]]) &&
-              !(!float.IsNaN(currentAbsoluteChild.style.dimensions[dim[axis]]) && currentAbsoluteChild.style.dimensions[dim[axis]] > 0.0) &&
+              !(!float.IsNaN(currentAbsoluteChild.style.dimensions[dim[axis]]) && currentAbsoluteChild.style.dimensions[dim[axis]] >= 0.0) &&
               !float.IsNaN(currentAbsoluteChild.style.position[leading[axis]]) &&
               !float.IsNaN(currentAbsoluteChild.style.position[trailing[axis]])) {
             currentAbsoluteChild.layout.dimensions[dim[axis]] = Math.Max(
