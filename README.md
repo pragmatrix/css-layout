@@ -7,7 +7,7 @@ The Java, C and JavaScript version of the code is available via [npm](https://ww
 
 In order to make sure that the code is correct, it is developed in JavaScript using TDD where each commit adds a unit test and the associated code to make it work. All the unit tests are tested against Chrome's implementation of CSS.
 
-The JavaScript version has been implemented in a way that can be easily transpiled to C and Java via regexes. The layout function doesn't do any allocation nor uses any of the dynamic aspect of JavaScript. The tests are also transpiled to make sure that the implementations are correct everywhere.
+The JavaScript version has been implemented in a way that can be easily transpiled to C and Java via regexes. The layout function doesn't do any allocation nor uses any of the dynamic aspects of JavaScript. The tests are also transpiled to make sure that the implementations are correct everywhere.
 
 
 Usage
@@ -91,7 +91,7 @@ padding, paddingLeft, paddingRight, paddingTop, paddingBottom | positive number
 borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth | positive number
 flexDirection | 'column', 'row'
 justifyContent | 'flex-start', 'center', 'flex-end', 'space-between', 'space-around'
-alignItems, alignSelf, alignContent | 'flex-start', 'center', 'flex-end', 'stretch'
+alignItems, alignSelf | 'flex-start', 'center', 'flex-end', 'stretch'
 flex | positive number
 flexWrap | 'wrap', 'nowrap'
 position | 'relative', 'absolute'
@@ -125,6 +125,13 @@ div, span {
 - Everything is `display: flex` by default. All the behaviors of `block` and `inline-block` can be expressed in term of `flex` but not the opposite.
 - All the flex elements are oriented from top to bottom, left to right and do not shrink. This is how things are laid out using the default CSS settings and what you'd expect.
 - Everything is `position: relative`. This makes `position: absolute` target the direct parent and not some parent which is either `relative` or `absolute`. If you want to position an element relative to something else, you should move it in the DOM instead of relying of CSS. It also makes `top, left, right, bottom` do something when not specifying `position: absolute`.
+
+Native Usage Notes
+------------------
+
+The C equivalent of `computeLayout` is [`layoutNode`](dist/css-layout.h#L1378).
+
+In order for layout to properly layout reflowable text, the `measure` function must be set on the `css_node` structure. The property can be found in [`css-layout.h`](dist/css-layout.h#L146). This function must take a void pointer to a `context` that will affect the size of the node and the `width` as computed by the layout engine, and must return a `css_dim_t` structure defining the actual needed size of the node. For the most part, the `context` field can be the text inside the node. No C implementation of this function is provided in provided - it depends on your use of css-layout. However an implementation of the function in JavaScript can be used for reference in the [test utilities](src/Layout-test-utils.js#L383).
 
 Development
 -----------
